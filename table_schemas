@@ -18,7 +18,18 @@ FROM `shortpixel-querry.analysis.paymentsCC_imp`;
 create table `shortpixel-querry.analysis.Payments` as
 SELECT  
 int64_field_1 as ClientId
-, double_field_2 as Amount
-, timestamp_field_3 as Date
+,timestamp_field_2 as DateAdded
+, case 
+  when string_field_3!="0000-00-00 00:00:00" then parse_timestamp("%Y-%m-%d %H:%M:%S",string_field_3)
+  else NULL
+  end as CancelDate
+, int64_field_5 as PlanId
+, case 
+  when string_field_6="1" then "Started"
+  when string_field_6="2" then "Confirmed"
+  when string_field_6="3" then "Cancelled" 
+  else null
+  end as Status
+, int64_field_7 as Actions
 FROM `shortpixel-querry.analysis.payments_imp`;
 
